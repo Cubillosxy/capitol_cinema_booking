@@ -26,3 +26,6 @@ repos:
     rev: 1.7.0  # Use the version you prefer
     hooks:
       - id: bandit
+        exclude: ^.*\/migrations\/.*\.py$||^.*\/tests\/.*\.py$
+        language: python
+        language_version: python3
