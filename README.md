@@ -7,7 +7,7 @@ Django monolith app to handle movie reservation
 - create ´.env´ by running ´ cp .env_example .env´
 - create ´local_settings´ by run ´cp local_settings.example.py capitol_cinema/local_settings.py´
 
-
+- run ´pre-commit install´
  ## other commands 
 
      
