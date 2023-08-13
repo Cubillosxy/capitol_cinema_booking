@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "users",
     "cinemas",
     "movies",
+    "screenings",
 ]
 
 MIDDLEWARE = [

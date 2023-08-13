@@ -8,8 +8,3 @@ class CinemaSerializer(serializers.Serializer):
     is_disabled = serializers.BooleanField(default=False)
     capacity = serializers.IntegerField()
     # created_at = serializers.DateTimeField(read_only=True)
-
-
-class CinemaCreateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=100)
-    city = serializers.CharField(max_length=200)
