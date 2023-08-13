@@ -67,7 +67,7 @@ class TestMovieDetailView:
     def test_get_not_admin(self, api_client, movie):
         url = self.url(movie)
         response = api_client.get(url)
-        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert response.status_code == status.HTTP_200_OK
 
     def test_get_admin(self, api_client, movie, user_admin_auth):
         url = self.url(movie)

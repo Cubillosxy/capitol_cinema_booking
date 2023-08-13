@@ -1,4 +1,4 @@
-from screenings.dataclasses import ScreeningData
+from screenings.dataclasses import ScreeningData, SeatData
 from screenings.models import Screening
 from utils.instance_utils import get_data_instance, update_model_instance
 
@@ -18,12 +18,26 @@ class ScreeningService:
         return Screening.objects.get(id=screening_id)
 
     @classmethod
-    def get_screening_by_id(cls, screening_id) -> ScreeningData | None:
+    def _get_active_screening_by_id(cls, screening_id) -> ScreeningData | None:
         try:
             screening = cls._get_screening_by_id(screening_id)
+            if screening.is_disabled:
+                return None
         except Screening.DoesNotExist:
             return None
-        return get_data_instance(ScreeningData, screening)
+        return screening
+
+    @classmethod
+    def get_active_screening_by_id(cls, screening_id) -> ScreeningData | None:
+        screening = cls._get_active_screening_by_id(screening_id)
+        return get_data_instance(ScreeningData, screening) if screening else None
+
+    @classmethod
+    def get_seats_by_screening_id(cls, screening_id) -> SeatData | None:
+        screening = cls._get_active_screening_by_id(screening_id)
+        if screening is None:
+            return None
+        return get_data_instance(SeatData, screening)
 
     @classmethod
     def create_screening(cls, data):

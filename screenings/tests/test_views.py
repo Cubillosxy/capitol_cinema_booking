@@ -53,7 +53,7 @@ class TestScreeningDetailView:
     def test_get_not_admin(self, api_client, screening):
         url = self.url(screening)
         response = api_client.get(url)
-        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert response.status_code == status.HTTP_200_OK
 
     def test_get_admin(self, api_client, screening, user_admin_auth):
         url = self.url(screening)
@@ -115,3 +115,24 @@ class TestScreeningDetailView:
         response = api_client.delete(url)
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert Screening.objects.filter(is_disabled=False).count() == 0
+
+
+class TestScreeningSeatsView:
+    def url(self, screening):
+        return reverse("screenings:screening-seats", args=[screening.id])
+
+    def test_get_invalid_id(self, api_client, screening):
+        url = reverse("screenings:screening-seats", args=[screening.id + 1])
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_get_not_admin(self, api_client, screening):
+        url = self.url(screening)
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_get_admin(self, api_client, screening, user_admin_auth):
+        url = self.url(screening)
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["available_seats"] == screening.cinema.capacity

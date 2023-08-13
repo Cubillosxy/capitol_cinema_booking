@@ -19,3 +19,11 @@ class Screening(models.Model):
         if self.pk is None:
             self.available_seats = self.cinema.capacity
         super().save(*args, **kwargs)
+
+    @property
+    def is_full(self):
+        return self.available_seats == 0
+
+    @property
+    def reserved_seats(self):
+        return self.cinema.capacity - self.available_seats

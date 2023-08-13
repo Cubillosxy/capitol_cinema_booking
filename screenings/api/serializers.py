@@ -15,3 +15,10 @@ class ScreeningSerializer(serializers.Serializer):
     is_disabled = serializers.BooleanField(default=False)
     created_at = serializers.DateTimeField(read_only=True)
     available_seats = serializers.IntegerField(read_only=True)
+
+
+class SeatSerializer(serializers.Serializer):
+    available_seats = serializers.IntegerField(read_only=True)
+    reserved_seats = serializers.IntegerField(read_only=True)
+    is_full = serializers.BooleanField(read_only=True)
+    cinema = CinemaSerializer(read_only=True)
