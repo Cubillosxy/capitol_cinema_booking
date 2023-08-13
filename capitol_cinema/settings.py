@@ -28,6 +28,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
+APPEND_SLASH = False
 
 # Application definition
 
@@ -39,10 +40,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Third party apps
+    "rest_framework",
     # Project Apps
     "users",
     "cinemas",
     "movies",
+    "screenings",
 ]
 
 MIDDLEWARE = [
@@ -133,6 +137,18 @@ STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+}
+
+if config("BROWSABLE_API_RENDERER", default=False, cast=bool):
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = REST_FRAMEWORK[
+        "DEFAULT_RENDERER_CLASSES"
+    ] + ["rest_framework.renderers.BrowsableAPIRenderer"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

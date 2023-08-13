@@ -34,3 +34,13 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgresdb
+
+
+  testdb:
+    image: postgres:15.4-alpine
+    environment:
+      - POSTGRES_USER=testdb
+      - POSTGRES_PASSWORD=testdb
+      - POSTGRES_DB=testdb
+    ports:
+      - 5433:5432

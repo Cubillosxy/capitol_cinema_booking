@@ -2,6 +2,9 @@
 Django monolith app to handle movie reservation 
 
 
+### Run tests
+docker exec -it capitol_cinema_booking-web-1 pytest -s
+
 ### Getting started local environment
 
 - create ´.env´ by running ´ cp .env_example .env´
