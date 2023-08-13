@@ -20,7 +20,7 @@ class ScreeningCreateView(CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ScreeningDetailView(APIView):
+class ScreeningAPIView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request, screening_id):

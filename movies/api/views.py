@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -25,7 +25,7 @@ class MovieListView(APIView):
 
 
 class MovieDetailView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser, IsAuthenticatedOrReadOnly]
 
     def get(self, request, movie_id):
         movie = MovieService.get_movie_by_id(movie_id)

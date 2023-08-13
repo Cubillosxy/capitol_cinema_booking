@@ -1,11 +1,18 @@
-from cinemas.services.cinema_services import CinemaService
-from movies.services.movie_services import MovieService
 from screenings.dataclasses import ScreeningData
 from screenings.models import Screening
-from utils import get_data_instance, update_model_instance
+from utils.instance_utils import get_data_instance, update_model_instance
 
 
 class ScreeningService:
+    @classmethod
+    def _get_all_screenings(cls, filters={}):
+        return Screening.objects.filter(**filters)
+
+    @classmethod
+    def get_all_screenings(cls, filters={}):
+        screenings = cls._get_all_screenings(filters=filters)
+        return [get_data_instance(ScreeningData, screening) for screening in screenings]
+
     @classmethod
     def _get_screening_by_id(cls, screening_id):
         return Screening.objects.get(id=screening_id)

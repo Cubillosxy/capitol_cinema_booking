@@ -5,9 +5,10 @@ from rest_framework.views import APIView
 
 from cinemas.api.serializers import CinemaSerializer
 from cinemas.services.cinema_services import CinemaService
+from screenings.api.serializers import ScreeningSerializer
 
 
-class CinemaListView(APIView):
+class CinemaListCreateView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
@@ -53,3 +54,16 @@ class CinemaDetailView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         CinemaService.disable_cinema(cinema)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CinemaScreeningsView(APIView):
+    permission_classes = []
+
+    def get(self, request, cinema_id):
+        cinema = CinemaService.get_cinema_by_id(cinema_id)
+        if cinema is None or cinema.is_disabled:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        screenings = CinemaService.get_cinema_screenings(cinema)
+        serialized_screenings = ScreeningSerializer(screenings, many=True).data
+        return Response(serialized_screenings)

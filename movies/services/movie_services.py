@@ -1,6 +1,6 @@
 from movies.dataclasses import MovieData
 from movies.models import Movie
-from utils import get_data_instance, update_model_instance
+from utils.instance_utils import get_data_instance, update_model_instance
 
 
 class MovieService:

@@ -116,3 +116,26 @@ class TestCinemaDetailView:
         response = api_client.delete(url)
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert not Cinema.objects.filter(pk=cinema.id, is_disabled=False).exists()
+
+
+class TestCinemaScreeningListView:
+    def url(self, cinema):
+        return reverse("cinemas:cinema-screenings", args=[cinema.id])
+
+    def test_get_invalid_id(self, api_client, user_admin_auth):
+        url = reverse("cinemas:cinema-screenings", args=[1000])
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_not_authenticate(self, api_client, cinema, screenings):
+        url = self.url(cinema)
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 0
+
+    def test_not_auth_screenings(self, api_client, screenings_by_cinema):
+        screening_1, screening_2, *_ = screenings_by_cinema
+        url = self.url(screening_1.cinema)
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        assert screening_1.movie.title in str(response.data)
