@@ -154,6 +154,13 @@ if config("BROWSABLE_API_RENDERER", default=False, cast=bool):
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+    }
+}
+
 try:
     from capitol_cinema.local_settings import *
 

@@ -3,6 +3,7 @@ from django.db import transaction
 from bookings.services.booking_services import BookingDatabaseService
 from screenings.dataclasses import SeatData
 from screenings.models import Seat
+from utils.cache import acquire_lock, release_lock
 from utils.instance_utils import get_data_instance
 
 
@@ -46,15 +47,22 @@ class SeatDatabaseService:
         booking = BookingDatabaseService._create_booking(data)
         for seat_data in seats_data:
             seat_id = seat_data["id"]
-            # TODO cache id
+            lock_id = f"lock_seat_{seat_id}"
+            if not acquire_lock(lock_id):
+                transaction.set_rollback(True)
+                raise ValueError(f"Seat ID {seat_id} already reserved")
+
             seat = cls._get_seat_by_screening_id(screening_id, seat_id)
+
             if seat.is_reserved == True:
                 transaction.set_rollback(True)
+                release_lock(lock_id)
                 raise ValueError(f"Seat ID {seat_id} is not available")
 
             seat.is_reserved = True
             seat.booking = booking
             seat.save()
+            release_lock(lock_id)
 
         booking.refresh_from_db()
         return booking
