@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from screenings.api.serializers import ScreeningSerializer, SeatSerializer
+from screenings.providers import disabled_bookings
 from screenings.services.screening_service import ScreeningService
 from utils.permissions import IsAdminOrReadOnly
 
@@ -29,7 +30,7 @@ class ScreeningSeatsView(APIView):
         if seats is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serialized_seats = SeatSerializer(seats).data
+        serialized_seats = SeatSerializer(seats, many=True).data
         return Response(serialized_seats)
 
 
@@ -62,4 +63,5 @@ class ScreeningAPIView(APIView):
         if screening is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
         ScreeningService.disable_screening(screening)
+        disabled_bookings(screening.id)
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -62,7 +62,7 @@ class TestScreeningDetailView:
 
         assert response.data["movie_id"] == screening.movie.id
         assert response.data["cinema_id"] == screening.cinema.id
-        assert response.data["available_seats"] == screening.cinema.capacity
+        assert response.data["available_seats"] == 0
         assert float(response.data["price"]) == float(screening.price)
 
     def test_edit_invalid_id(self, api_client, screening, user_admin_auth):
@@ -84,7 +84,7 @@ class TestScreeningDetailView:
         assert "This field is required." in str(response.data)
         assert "date" in str(response.data)
 
-    def test_put_valid_data(self, api_client, screening, user_admin_auth):
+    def test_edit_valid_data(self, api_client, screening, user_admin_auth):
         url = self.url(screening)
         data = {
             "movie_id": screening.movie.id,
@@ -97,7 +97,7 @@ class TestScreeningDetailView:
         assert response.status_code == status.HTTP_200_OK
         assert response.data["movie"]["id"] == data["movie_id"]
         assert response.data["cinema_id"] == data["cinema_id"]
-        assert response.data["available_seats"] == screening.cinema.capacity
+        assert response.data["available_seats"] == 0
         assert float(response.data["price"]) == float(data["price"])
 
     def test_delete_not_admin(self, api_client, screening):
@@ -135,4 +135,13 @@ class TestScreeningSeatsView:
         url = self.url(screening)
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert response.data["available_seats"] == screening.cinema.capacity
+        assert screening.available_seats == 0
+        assert len(response.data) == 0
+
+    def test_get_seats_ok(self, api_client, seats_and_screening, user_admin_auth):
+        seats, screening = seats_and_screening
+        url = self.url(screening)
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        assert screening.available_seats == len(seats)
+        assert len(response.data) == len(seats)

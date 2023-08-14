@@ -19,12 +19,16 @@ class ScreeningData:
     is_disabled: bool
     created_at: datetime
     available_seats: int
+    reserved_seats: int
     is_full: bool
 
 
 @dataclass
 class SeatData:
-    available_seats: int
-    reserved_seats: int
-    is_full: bool
-    cinema: CinemaData
+    screening: ScreeningData
+    screening_id: int
+    booking_id: int | None
+    number: int
+    is_reserved: bool
+    created_at: datetime | None
+    updated_at: datetime | None

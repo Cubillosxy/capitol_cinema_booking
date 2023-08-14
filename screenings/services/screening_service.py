@@ -1,5 +1,6 @@
-from screenings.dataclasses import ScreeningData, SeatData
+from screenings.dataclasses import ScreeningData
 from screenings.models import Screening
+from screenings.services.seat_services import SeatService
 from utils.instance_utils import get_data_instance, update_model_instance
 
 
@@ -33,15 +34,21 @@ class ScreeningService:
         return get_data_instance(ScreeningData, screening) if screening else None
 
     @classmethod
-    def get_seats_by_screening_id(cls, screening_id) -> SeatData | None:
+    def get_seats_by_screening_id(cls, screening_id) -> list[object] | None:
         screening = cls._get_active_screening_by_id(screening_id)
         if screening is None:
             return None
-        return get_data_instance(SeatData, screening)
+        return SeatService.get_available_seats(screening)
+
+    @classmethod
+    def _create_screening(cls, data):
+        return Screening.objects.create(**data)
 
     @classmethod
     def create_screening(cls, data):
-        return Screening.objects.create(**data)
+        screening = cls._create_screening(data)
+        SeatService.create_seats_by_screening(screening)
+        return get_data_instance(ScreeningData, screening)
 
     @classmethod
     def update_screening(cls, screening, data):
