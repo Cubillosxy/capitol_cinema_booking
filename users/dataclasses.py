@@ -7,8 +7,9 @@ class UserData:
     id: int
     username: str
     email: str
+    first_name: str
+    last_name: str
     is_active: bool
     is_staff: bool
     is_superuser: bool
-    created_at: datetime
-    updated_at: datetime
+    date_joined: datetime | None

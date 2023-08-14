@@ -12,8 +12,8 @@ class BookingData:
     screening_id: int
     is_cancelled: bool
     is_active: bool
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime | None
+    updated_at: datetime | None
     user: UserData
     screening: ScreeningData
     seats: list[SeatData]

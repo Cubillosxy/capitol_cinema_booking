@@ -23,6 +23,7 @@ urlpatterns = [
     path("cinemas/", include("cinemas.api.urls", namespace="cinemas")),
     path("movies/", include("movies.api.urls", namespace="movies")),
     path("screenings/", include("screenings.api.urls", namespace="screenings")),
+    path("bookings/", include("bookings.api.urls", namespace="bookings")),
 ]
 
 if settings.DEBUG:

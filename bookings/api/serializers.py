@@ -19,6 +19,9 @@ class BookingSerializer(serializers.Serializer):
 
 class SeatBookSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    number = serializers.IntegerField(read_only=True)
+    booking_id = serializers.IntegerField(read_only=True)
+    is_reserved = serializers.BooleanField(read_only=True)
 
 
 class BookingCreateSerializer(serializers.Serializer):

@@ -25,6 +25,7 @@ class ScreeningData:
 
 @dataclass
 class SeatData:
+    id: int
     screening: ScreeningData
     screening_id: int
     booking_id: int | None
