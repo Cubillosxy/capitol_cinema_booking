@@ -22,10 +22,11 @@ repos:
     rev: v5.10.1  # Use the version you prefer
     hooks:
       - id: isort
+
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.5  # Use the version you prefer
     hooks:
       - id: bandit
-        exclude: ^.*\/migrations\/.*\.py$||^.*\/tests\/.*\.py$
+        exclude: ^(.*\/migrations\/.*\.py$)|(.*\/tests\/.*\.py$)
         language: python
         language_version: python3
