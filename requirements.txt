@@ -14,3 +14,4 @@ pre-commit==3.3.3 # hooks for git: flake8, black, isort, bandit
 pylint-django==2.5.3
 #pdb==0.13.13 # install only if neeeded
 gunicorn==21.2.0
+pylint==2.17.5
