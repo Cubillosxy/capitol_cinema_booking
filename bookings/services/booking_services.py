@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 from bookings.dataclasses import BookingData
 from bookings.models import Booking
 from users.services.user_services import UserDatabaseService
-from utils.instance_utils import get_data_instance, update_model_instance
+from utils.instance_utils import get_data_instance
 
 
 class BookingDatabaseService:
