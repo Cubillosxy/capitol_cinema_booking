@@ -2,25 +2,12 @@ default_language_version:
   python: python3.10
 
 repos:
-
-  - repo: https://github.com/pycqa/pylint
-    rev: pylint-2.6.0
-    hooks:
-      - id: pylint
-        name: pylint
-        entry: pylint --rcfile=.pylintrc
-        language: system
-        types: [python]
-        args:
-          [
-            "-rn", # Only display messages
-            "-sn", # Don't display the score
-          ]
+    
   - repo: https://github.com/psf/black
     rev: 23.7.0
     hooks:
       - id: black
-        exclude: ^.*\/migrations\/.*\.py$
+        exclude: ^.*\/(migrations|tests)\/.*\.py$
         language: python
         language_version: python3
 
@@ -33,11 +20,17 @@ repos:
         exclude: ^.*\/migrations\/.*\.py$
       - id: check-merge-conflict
 
+  - repo: https://github.com/PyCQA/flake8
+    rev: 3.9.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-django]
+
   - repo: https://github.com/pre-commit/mirrors-isort
     rev: v5.10.1  # Use the version you prefer
     hooks:
       - id: isort
-        exclude: ^.*\/migrations\/.*\.py$
+        exclude: ^.*\/(migrations|tests)\/.*\.py$
         language: python
         language_version: python3
 
@@ -45,6 +38,6 @@ repos:
     rev: 1.7.5  # Use the version you prefer
     hooks:
       - id: bandit
-        exclude: ^(.*\/migrations\/.*\.py$)|(.*\/tests\/.*\.py$)
+        exclude: ^.*\/(migrations|tests)\/.*\.py$
         language: python
         language_version: python3
