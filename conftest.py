@@ -2,6 +2,7 @@ import os
 
 import pytest
 
+from bookings.tests.fixtures import *  # noqa
 from cinemas.tests.fixtures import *  # noqa
 from movies.tests.fixtures import *  # noqa
 from screenings.tests.fixtures import *  # noqa

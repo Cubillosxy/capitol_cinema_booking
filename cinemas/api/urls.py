@@ -1,10 +1,15 @@
 from django.urls import path
 
-from cinemas.api.views import CinemaDetailView, CinemaListView
+from cinemas.api import views
 
 urlpatterns = [
-    path("", CinemaListView.as_view(), name="cinema-list"),
-    path("<int:cinema_id>/", CinemaDetailView.as_view(), name="cinema-detail"),
+    path("", views.CinemaListCreateView.as_view(), name="cinema-list"),
+    path("<int:cinema_id>/", views.CinemaDetailView.as_view(), name="cinema-detail"),
+    path(
+        "<int:cinema_id>/screenings/",
+        views.CinemaScreeningsView.as_view(),
+        name="cinema-screenings",
+    ),
 ]
 
 app_name = "cinemas"

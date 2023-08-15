@@ -1,0 +1,78 @@
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from bookings.api.serializers import (
+    BookingCreateSerializer,
+    BookingSerializer,
+    SeatBookSerializer,
+)
+from bookings.providers import (
+    book_seats,
+    get_screening_by_id,
+    validate_seats_availability,
+)
+from bookings.services.booking_services import BookingService
+
+
+class BookingListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, screening_id):
+        screening = get_screening_by_id(screening_id)
+        if screening is None:
+            return Response(
+                {"detail": "Screening not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = BookingCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            seats_data = serializer.validated_data["seats"]
+            validation_errors = validate_seats_availability(seats_data, screening_id)
+            if validation_errors:
+                return Response(
+                    {"errors": validation_errors}, status=status.HTTP_400_BAD_REQUEST
+                )
+            seats = book_seats(seats_data, screening_id, request.user.id)
+            serialized_booking = SeatBookSerializer(seats, many=True).data
+            return Response(serialized_booking, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BookingDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, booking_id):
+        booking = BookingService.get_booking_by_id(booking_id)
+        if not BookingService.has_booking_permission(
+            user_id=request.user.id, booking=booking
+        ):
+            return Response(
+                {"detail": "You don't have permission to perform this action."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if booking is None:
+            return Response(
+                {"detail": "Booking not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+        serialized_booking = BookingSerializer(booking).data
+        return Response(serialized_booking)
+
+    def delete(self, request, booking_id):
+        booking = BookingService.get_booking_by_id(booking_id)
+        if not BookingService.has_booking_permission(
+            user_id=request.user.id, booking=booking
+        ):
+            return Response(
+                {"detail": "You don't have permission to perform this action."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if booking is None:
+            return Response(
+                {"detail": "Booking not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+        BookingService.cancel_booking(booking)
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -1,17 +1,22 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cinemas.api.serializers import CinemaSerializer
+from cinemas.providers import get_cinema_screenings
 from cinemas.services.cinema_services import CinemaService
+from screenings.api.serializers import ScreeningSerializer
 
 
-class CinemaListView(APIView):
+class CinemaListCreateView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
-        cinemas = CinemaService.get_all_cinemas()
+        filters = request.query_params
+        cinemas = CinemaService.get_all_cinemas(filters=filters)
         serialized_cinemas = CinemaSerializer(cinemas, many=True).data
         return Response(serialized_cinemas)
 
@@ -24,6 +29,7 @@ class CinemaListView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(cache_page(60 * 60), name="dispatch")
 class CinemaDetailView(APIView):
     permission_classes = [IsAdminUser]
 
@@ -53,3 +59,16 @@ class CinemaDetailView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         CinemaService.disable_cinema(cinema)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CinemaScreeningsView(APIView):
+    permission_classes = []
+
+    def get(self, request, cinema_id):
+        cinema = CinemaService.get_cinema_by_id(cinema_id)
+        if cinema is None or cinema.is_disabled:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        screenings = get_cinema_screenings(cinema.id)
+        serialized_screenings = ScreeningSerializer(screenings, many=True).data
+        return Response(serialized_screenings)

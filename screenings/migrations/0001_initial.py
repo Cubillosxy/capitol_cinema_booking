@@ -5,27 +5,44 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('cinemas', '0001_initial'),
-        ('movies', '0001_initial'),
+        ("cinemas", "0001_initial"),
+        ("movies", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Screnning',
+            name="Screnning",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField()),
-                ('price', models.DecimalField(decimal_places=2, max_digits=6)),
-                ('is_dubbed', models.BooleanField(default=False)),
-                ('is_subtitled', models.BooleanField(default=False)),
-                ('is_disabled', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('cinema', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='cinemas.cinema')),
-                ('movie', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='movies.movie')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateTimeField()),
+                ("price", models.DecimalField(decimal_places=2, max_digits=6)),
+                ("is_dubbed", models.BooleanField(default=False)),
+                ("is_subtitled", models.BooleanField(default=False)),
+                ("is_disabled", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "cinema",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="cinemas.cinema"
+                    ),
+                ),
+                (
+                    "movie",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="movies.movie"
+                    ),
+                ),
             ],
         ),
     ]

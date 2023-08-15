@@ -3,7 +3,8 @@ version: '3'
 services:
   web:
     build: .
-    command: bash -c "sleep 7 && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "sleep 3 && gunicorn capitol_cinema.wsgi:application -b 0.0.0.0:8000 -w 3"
+    # command: bash -c "sleep 3 && python manage.py runserver 0.0.0.0:8000"
     restart: always
     volumes:
       - .:/code
@@ -25,7 +26,6 @@ services:
     depends_on:
       - db
     
-
   db:
     image: postgres:15.4-alpine
     volumes:

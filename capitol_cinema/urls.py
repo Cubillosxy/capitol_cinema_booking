@@ -19,10 +19,12 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("s3cr3t-adm1n/", admin.site.urls),
     path("cinemas/", include("cinemas.api.urls", namespace="cinemas")),
     path("movies/", include("movies.api.urls", namespace="movies")),
     path("screenings/", include("screenings.api.urls", namespace="screenings")),
+    path("bookings/", include("bookings.api.urls", namespace="bookings")),
+    path("users/", include("users.api.urls", namespace="users")),
 ]
 
 if settings.DEBUG:

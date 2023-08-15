@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "cinemas",
     "movies",
     "screenings",
+    "bookings",
 ]
 
 MIDDLEWARE = [
@@ -152,6 +153,15 @@ if config("BROWSABLE_API_RENDERER", default=False, cast=bool):
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+SALT_KEY = config("SALT_KEY", default="")
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+    }
+}
 
 try:
     from capitol_cinema.local_settings import *

@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 
 from movies.api.serializers import MovieSerializer
 from movies.services.movie_services import MovieService
+from utils.permissions import IsAdminOrReadOnly
 
 
 class MovieListView(APIView):
@@ -25,7 +26,7 @@ class MovieListView(APIView):
 
 
 class MovieDetailView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminOrReadOnly]
 
     def get(self, request, movie_id):
         movie = MovieService.get_movie_by_id(movie_id)
