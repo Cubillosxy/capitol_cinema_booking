@@ -1,0 +1,21 @@
+name: CD
+
+on:
+  pull_request:
+    branches:
+      - 'devel'
+
+jobs:
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to QA
+      run: echo "Deplyinnnnnnn    .....  OK"
+
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run SonarQube scan
+      run: echo "Run SonarQube scan"
