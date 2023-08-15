@@ -1,9 +1,26 @@
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.api.serializers import UserLoginSerializer
+from users.api.serializers import UserLoginSerializer, UserSerializer
+from users.services.mixings import PermissionMixin
 from users.services.user_services import UserService
+
+
+class UserDetailView(PermissionMixin, viewsets.GenericViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, pk=None):  # pylint: disable=unused-argument
+        user_data = UserService.get_user_data(pk)
+        serializer = UserSerializer(user_data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="set_owner_permissions")
+    def set_owner_permissions(self, request, pk=None):
+        UserService.set_owner_permissions(pk)
+        return Response(status=status.HTTP_200_OK)
 
 
 class LoginView(APIView):

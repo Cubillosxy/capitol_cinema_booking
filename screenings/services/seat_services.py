@@ -54,7 +54,7 @@ class SeatDatabaseService:
 
             seat = cls._get_seat_by_screening_id(screening_id, seat_id)
 
-            if seat.is_reserved == True:
+            if seat.is_reserved:
                 transaction.set_rollback(True)
                 release_lock(lock_id)
                 raise ValueError(f"Seat ID {seat_id} is not available")
@@ -101,7 +101,7 @@ class SeatService:
         try:
             booking = SeatDatabaseService._book_seats(seats_data, screening_id, user_id)
             return [get_data_instance(SeatData, seat) for seat in booking.seats.all()]
-        except ValueError as e:
+        except ValueError:
             return None
 
     @classmethod
@@ -117,7 +117,7 @@ class SeatService:
                 errors.append(f"Seat ID {seat_id} does not exist")
                 continue
 
-            if seat.is_reserved == True:
+            if seat.is_reserved:
                 errors.append(f"Seat ID {seat_id} is not available")
 
         return errors

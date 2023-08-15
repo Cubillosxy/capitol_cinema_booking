@@ -2,8 +2,6 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from movies.models import Movie
-
 pytestmark = pytest.mark.django_db
 
 

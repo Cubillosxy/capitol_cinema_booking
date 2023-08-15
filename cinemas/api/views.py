@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -27,6 +29,7 @@ class CinemaListCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(cache_page(60 * 60), name="dispatch")
 class CinemaDetailView(APIView):
     permission_classes = [IsAdminUser]
 

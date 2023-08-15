@@ -127,3 +127,15 @@ class TestDetailView:
         url = self.url(booking.id + 2)
         response = api_client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_cancel_not_owner(self, api_client, booking, user):
+        api_client.force_login(user)
+        url = self.url(booking.id)
+        response = api_client.delete(url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_cancel_owner(self, api_client, booking):
+        api_client.force_login(booking.user)
+        url = self.url(booking.id)
+        response = api_client.delete(url)
+        assert response.status_code == status.HTTP_204_NO_CONTENT

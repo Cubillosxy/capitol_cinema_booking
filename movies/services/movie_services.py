@@ -1,9 +1,13 @@
+from django.core.cache import cache
+
 from movies.dataclasses import MovieData
 from movies.models import Movie
 from utils.instance_utils import get_data_instance, update_model_instance
 
 
 class MovieService:
+    timeout_12_hours = 60 * 60 * 12
+
     @classmethod
     def _get_all_movies(cls, is_disabled=False):
         return Movie.objects.filter(is_disabled=is_disabled)
@@ -14,8 +18,14 @@ class MovieService:
 
     @classmethod
     def get_all_movies(cls, is_disabled=False):
-        movies = cls._get_all_movies(is_disabled=is_disabled)
-        return [get_data_instance(MovieData, movie) for movie in movies]
+        cache_key = f"movies_{is_disabled}"
+        movies_data = cache.get(cache_key)
+        if not movies_data:
+            movies = cls._get_all_movies(is_disabled=is_disabled)
+            movies_data = [get_data_instance(MovieData, movie) for movie in movies]
+            cache.set(cache_key, movies_data, timeout=cls.timeout_12_hours)
+
+        return movies_data
 
     @classmethod
     def get_movie_by_id(cls, movie_id) -> MovieData | None:

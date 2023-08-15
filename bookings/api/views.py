@@ -59,3 +59,20 @@ class BookingDetailView(APIView):
             )
         serialized_booking = BookingSerializer(booking).data
         return Response(serialized_booking)
+
+    def delete(self, request, booking_id):
+        booking = BookingService.get_booking_by_id(booking_id)
+        if not BookingService.has_booking_permission(
+            user_id=request.user.id, booking=booking
+        ):
+            return Response(
+                {"detail": "You don't have permission to perform this action."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if booking is None:
+            return Response(
+                {"detail": "Booking not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+        BookingService.cancel_booking(booking)
+        return Response(status=status.HTTP_204_NO_CONTENT)

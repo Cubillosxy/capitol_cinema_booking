@@ -11,6 +11,8 @@ docker exec -it capitol_cinema_booking-web-1 pytest -s
 - create ´local_settings´ by run ´cp local_settings.example.py capitol_cinema/local_settings.py´
 
 - run ´pre-commit install´
+
+
  ## other commands 
 
      

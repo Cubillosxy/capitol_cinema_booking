@@ -40,28 +40,11 @@ class BookingService:
         return filters
 
     @classmethod
-    def get_all_bookings(
-        cls, is_cancelled: bool = False, filters: dict = {}
-    ) -> list[BookingData]:
-        validated_filters = cls._validate_filters(filters)
-        bookings = BookingDatabaseService._get_all_bookings(
-            is_cancelled=is_cancelled, filters=validated_filters
-        )
-        return [get_data_instance(BookingData, booking) for booking in bookings]
-
-    @classmethod
     def get_booking_by_id(cls, booking_id: int) -> BookingData | None:
         try:
             booking = BookingDatabaseService._get_booking_by_id(booking_id)
         except Booking.DoesNotExist:
             return None
-        return get_data_instance(BookingData, booking)
-
-    @classmethod
-    def update_booking(cls, booking: BookingData, data: dict):
-        booking = BookingDatabaseService._get_booking_by_id(booking.id)
-        update_model_instance(booking, data)
-        booking.refresh_from_db()
         return get_data_instance(BookingData, booking)
 
     @classmethod
@@ -78,8 +61,8 @@ class BookingService:
 
     @classmethod
     def has_booking_permission(cls, user_id: int, booking: BookingData):
-        owner_admin_permission = UserDatabaseService._user_has_permission(
-            user_id=user_id, permission="users.can_view_bookings"
+        owner_admin_permission = UserDatabaseService._user_has_booking_view_permission(
+            user_id
         )
         if not owner_admin_permission:
             return booking and booking.user_id == user_id

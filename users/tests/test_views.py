@@ -62,3 +62,42 @@ class TestRegisterView:
         response = api_client.post(url, data, format="json")
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "invalid" in str(response.data)
+
+
+class TestDetailView:
+    def url(self, user_id):
+        return reverse("users:detail-detail", args=[user_id])
+
+    def test_get_user_detail(self, api_client, user):
+        url = self.url(user.id)
+        api_client.force_authenticate(user=user)
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_get_user_detail_unauthorized(self, api_client, user):
+        url = self.url(user.id)
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_get_user_detail_admin(self, api_client, user_admin_auth, user):
+        url = self.url(user.id)
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["email"] == user.email
+
+
+class TestPermissionView:
+    def url(self, user_id):
+        return reverse("users:detail-set-owner-permissions", args=[user_id])
+
+    def test_set_permissions_unauthorized(self, api_client):
+        url = self.url(3)
+        response = api_client.post(url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_set_permission(
+        self, api_client, user_admin_auth, user, group_book_permission
+    ):
+        url = self.url(user.id)
+        response = api_client.post(url)
+        assert response.status_code == status.HTTP_200_OK

@@ -29,3 +29,11 @@ class Permission(DjangoModelFactory):
     class Meta:
         model = apps.get_model("auth", "Permission")
         django_get_or_create = ("name", "codename")
+
+
+class GroupFactory(DjangoModelFactory):
+    name = factory.Sequence(lambda n: f"Group Name {n}")
+
+    class Meta:
+        model = apps.get_model("auth", "Group")
+        django_get_or_create = ("name",)
