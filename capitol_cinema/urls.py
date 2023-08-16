@@ -18,6 +18,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
+from utils.docs import schema_view
+
 urlpatterns = [
     path("s3cr3t-adm1n/", admin.site.urls),
     path("cinemas/", include("cinemas.api.urls", namespace="cinemas")),
@@ -28,4 +30,15 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    pass
+    urlpatterns += [
+        path(
+            "api-doc/",
+            schema_view.with_ui("swagger", cache_timeout=10),
+            name="schema-swagger-ui",
+        ),
+        path(
+            "redoc/",
+            schema_view.with_ui("redoc", cache_timeout=10),
+            name="schema-redoc",
+        ),
+    ]
