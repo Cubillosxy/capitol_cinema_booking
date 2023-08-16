@@ -3,6 +3,11 @@ Django monolithic app to handle movie reservations.
 This app allows users to make reservations for screening shows.
 
 
+ - Documentation generate with redoc [READ THE DOCS](/redoc/)
+ - API DOCS [swagger](/api-doc/)
+ - Project docs [notion](https://www.notion.so/Naya-Homes-Challenge-b428bedf28934d51bd9cfb8c38153253)
+
+
 ### Getting started local environment
 
 - create ´.env´ by running ´ cp .env_example .env´
@@ -12,7 +17,7 @@ This app allows users to make reservations for screening shows.
 - run ´pre-commit install´
 
 
- ## Running the development environment
+#### Running the development environment
 - run ´docker-compose up --build´
 - runing test ´docker exec -it capitol_cinema_booking-web-1 pytest´
      
@@ -20,7 +25,7 @@ This app allows users to make reservations for screening shows.
 ### Hostnames for accessing the service directly
 We provide pre-load-data for testing the service (only for testing purposes).
 
-
+# TODO
 
 
 #### Run tests and install libraries

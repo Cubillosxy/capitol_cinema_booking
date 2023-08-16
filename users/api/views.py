@@ -11,6 +11,8 @@ from users.services.user_services import UserService
 
 class UserDetailView(PermissionMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+    queryset = []
 
     def retrieve(self, request, pk=None):  # pylint: disable=unused-argument
         user_data = UserService.get_user_data(pk)

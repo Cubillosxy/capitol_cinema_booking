@@ -11,6 +11,7 @@ from utils.permissions import IsAdminOrReadOnly
 
 
 class ScreeningCreateView(CreateAPIView):
+    serializer_class = ScreeningSerializer
     permission_classes = [IsAdminUser]
 
     def post(self, request):
