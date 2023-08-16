@@ -11,7 +11,7 @@ class CinemaFactory(DjangoModelFactory):
     name = factory.LazyAttribute(lambda _: faker.name())
     city = factory.LazyAttribute(lambda _: faker.city())
     address = factory.LazyAttribute(lambda _: faker.address())
-    capacity = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=100))
+    capacity = factory.LazyAttribute(lambda _: faker.random_int(min=4, max=100))
     is_disabled = False
 
     class Meta:

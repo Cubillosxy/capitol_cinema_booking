@@ -5,7 +5,7 @@ from rest_framework import status
 pytestmark = pytest.mark.django_db
 
 
-class TestMovieListView:
+class TestMovieListCreate:
     @pytest.fixture
     def url(self):
         return reverse("movies:movie-list")

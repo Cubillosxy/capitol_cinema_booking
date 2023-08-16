@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from drf_yasg.utils import swagger_auto_schema
+
 from cinemas.api.serializers import CinemaSerializer
 from cinemas.providers import get_cinema_screenings
 from cinemas.services.cinema_services import CinemaService
@@ -12,14 +14,22 @@ from screenings.api.serializers import ScreeningSerializer
 
 
 class CinemaListCreateView(APIView):
+    """
+    Create new cinema and list cinemas
+
+    """
+
     permission_classes = [IsAdminUser]
 
+    @swagger_auto_schema(responses={200: CinemaSerializer(many=True)})
     def get(self, request):
         filters = request.query_params
         cinemas = CinemaService.get_all_cinemas(filters=filters)
+        # TODO paginate
         serialized_cinemas = CinemaSerializer(cinemas, many=True).data
         return Response(serialized_cinemas)
 
+    @swagger_auto_schema(request_body=CinemaSerializer)
     def post(self, request):
         serializer = CinemaSerializer(data=request.data)
         if serializer.is_valid():
@@ -31,8 +41,15 @@ class CinemaListCreateView(APIView):
 
 @method_decorator(cache_page(60 * 60), name="dispatch")
 class CinemaDetailView(APIView):
+    """
+    Get, update or delete cinema by id
+
+
+    """
+
     permission_classes = [IsAdminUser]
 
+    @swagger_auto_schema(responses={200: CinemaSerializer})
     def get(self, request, cinema_id):
         cinema = CinemaService.get_cinema_by_id(cinema_id)
         if cinema is None:
@@ -40,6 +57,7 @@ class CinemaDetailView(APIView):
         serialized_cinema = CinemaSerializer(cinema).data
         return Response(serialized_cinema)
 
+    @swagger_auto_schema(request_body=CinemaSerializer)
     def put(self, request, cinema_id):
         cinema = CinemaService.get_cinema_by_id(cinema_id)
         if cinema is None:
@@ -62,8 +80,14 @@ class CinemaDetailView(APIView):
 
 
 class CinemaScreeningsView(APIView):
+    """
+    Get screenings for cinema by id
+    list screenings availables in a cinema
+    """
+
     permission_classes = []
 
+    @swagger_auto_schema(responses={200: ScreeningSerializer(many=True)})
     def get(self, request, cinema_id):
         cinema = CinemaService.get_cinema_by_id(cinema_id)
         if cinema is None or cinema.is_disabled:

@@ -3,6 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from drf_yasg.utils import swagger_auto_schema
+
 from bookings.api.serializers import (
     BookingCreateSerializer,
     BookingSerializer,
@@ -16,9 +18,18 @@ from bookings.providers import (
 from bookings.services.booking_services import BookingService
 
 
-class BookingListCreateView(APIView):
+class BookingCreateView(APIView):
+    """
+    Create a booking for a screening.
+
+    """
+
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        request_body=BookingCreateSerializer,
+        responses={201: SeatBookSerializer(many=True)},
+    )
     def post(self, request, screening_id):
         screening = get_screening_by_id(screening_id)
         if screening is None:
@@ -41,8 +52,16 @@ class BookingListCreateView(APIView):
 
 
 class BookingDetailView(APIView):
+    """
+    Retrieve or delete a booking.
+
+    get: retrieve a booking.
+    delete: cinema owner or admin can cancel a booking.
+    """
+
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(responses={200: BookingSerializer})
     def get(self, request, booking_id):
         booking = BookingService.get_booking_by_id(booking_id)
         if not BookingService.has_booking_permission(
