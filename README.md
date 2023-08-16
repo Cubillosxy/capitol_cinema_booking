@@ -1,22 +1,47 @@
 # capitol_cinema_booking
-Django monolith app to handle movie reservation 
+Django monolithic app to handle movie reservations.
+This app allows users to make reservations for screening shows.
+
+![Arh](https://github.com/Cubillosxy/capitol_cinema_booking/blob/main/docs/app_arch.png)
 
 
-### Run tests
-docker exec -it capitol_cinema_booking-web-1 pytest -s
+ - Documentation generate with redoc [READ THE DOCS](/redoc/)
+ - API DOCS [swagger](/api-doc/)
+ - Project docs [notion](https://zenith-tuck-513.notion.site/Naya-Homes-Challenge-b428bedf28934d51bd9cfb8c38153253)
+ - Arquitecture Diagram [monolith](https://github.com/Cubillosxy/capitol_cinema_booking/blob/main/docs/app_arch.png)
+
 
 ### Getting started local environment
 
-- create ´.env´ by running ´ cp .env_example .env´
-- create ´local_settings´ by run ´cp local_settings.example.py capitol_cinema/local_settings.py´
+* create ´.env´ by running ´ cp .env_example .env´
+* set environment variables as required (DJANGO_SECRET_KEY: required)
 
-- run ´pre-commit install´
+* install pre-commit by running ´pip install pre-commit´
+* run ´pre-commit install´
 
 
- ## other commands 
+#### Running the development environment
 
+* run ´docker-compose up --build´
+* runing test ´docker exec -it capitol_cinema_booking-web-1 pytest´
      
-## Database
+
+### Hostnames for accessing the service directly
+We provide pre-load-data for testing the service (only for testing purposes).
+
+ * super user admin *admin@admin.com* password=admin
+ * cinema owner user *owner@owner.com* password=owner
+ * Local: http://127.0.0.1:8000
+    - use swagger to test endpoints 
+    - when you create a sreening the seats will be created
+ 
+
+
+#### Run tests and install libraries
+docker exec -it capitol_cinema_booking-web-1 pytest -s
+docker exec -it capitol_cinema_booking-web-1 pip install ipdb 
+
+## Database commands
 
 dump:
 
@@ -32,7 +57,6 @@ restore:
 You can connect to the database shell using:
 
     docker exec -it capitol_cinema_booking-db-1 psql --dbname=postgres --username=postgres
-
 
 
 To run any other command on the app container:
