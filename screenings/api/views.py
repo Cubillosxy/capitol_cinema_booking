@@ -4,6 +4,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from drf_yasg.utils import swagger_auto_schema
+
 from screenings.api.serializers import ScreeningSerializer, SeatSerializer
 from screenings.providers import disabled_bookings
 from screenings.services.screening_service import ScreeningService
@@ -11,9 +13,16 @@ from utils.permissions import IsAdminOrReadOnly
 
 
 class ScreeningCreateView(CreateAPIView):
+    """
+    Create a new screening
+
+
+    """
+
     serializer_class = ScreeningSerializer
     permission_classes = [IsAdminUser]
 
+    @swagger_auto_schema(responses={201: "Created", 400: "Bad request"})
     def post(self, request):
         serializer = ScreeningSerializer(data=request.data)
         if serializer.is_valid():
@@ -24,8 +33,15 @@ class ScreeningCreateView(CreateAPIView):
 
 
 class ScreeningSeatsView(APIView):
+    """
+    List Seats for a screening
+
+    results: seats list
+    """
+
     permission_classes = []
 
+    @swagger_auto_schema(responses={200: "OK", 404: "Not found"})
     def get(self, request, screening_id):
         seats = ScreeningService.get_seats_by_screening_id(screening_id)
         if seats is None:
@@ -36,8 +52,18 @@ class ScreeningSeatsView(APIView):
 
 
 class ScreeningAPIView(APIView):
+    """
+    Retrieve, update or delete a screening instance.
+
+    regular_user: read only
+    admin: read, write, delete
+    """
+
     permission_classes = [IsAdminOrReadOnly]
 
+    @swagger_auto_schema(
+        request_body=ScreeningSerializer, responses={200: "OK", 404: "Not found"}
+    )
     def get(self, request, screening_id):
         screening = ScreeningService.get_active_screening_by_id(screening_id)
         if screening is None:

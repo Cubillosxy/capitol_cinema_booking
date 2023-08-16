@@ -28,7 +28,9 @@ class UserDatabaseService:
 
     @classmethod
     def _create_user(cls, username, password) -> User:
-        return User.objects.create_user(username=username, password=password)
+        return User.objects.create_user(
+            username=username, email=username, password=password
+        )
 
     @classmethod
     def _add_group_permision(cls, user: User, group_name) -> None:
