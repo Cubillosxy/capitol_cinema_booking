@@ -4,14 +4,24 @@ on:
   pull_request:
     branches:
       - 'devel'
+      - 'main'
 
 jobs:
 
   deploy:
     runs-on: ubuntu-latest
     steps:
+    - name: Building image
+      run : echo "Building image"
+    - name: make migrations
+      run: echo "migrate database"
+    - name: tagging image
+      run: echo "tagging image"
+    - name: registring image
+      run: echo "registry login"
     - name: Deploy to QA
       run: echo "Deplyinnnnnnn    .....  OK"
+    
 
   sonarqube:
     runs-on: ubuntu-latest
