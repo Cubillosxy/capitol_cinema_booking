@@ -26,8 +26,8 @@ class TestBookSeatsMethod:
 
         seat.refresh_from_db()
         seat2.refresh_from_db()
-        assert seat.is_reserved == True
-        assert seat2.is_reserved == True
+        assert seat.is_reserved
+        assert seat2.is_reserved
 
         assert seat.booking == booking
         assert seat2.booking == booking

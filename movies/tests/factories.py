@@ -1,5 +1,6 @@
-import factory
 from django.apps import apps
+
+import factory
 from factory.django import DjangoModelFactory
 from faker import Factory as FackerFactory
 

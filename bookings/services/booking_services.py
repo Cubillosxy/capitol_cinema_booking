@@ -9,8 +9,10 @@ from utils.instance_utils import get_data_instance
 class BookingDatabaseService:
     @classmethod
     def _get_all_bookings(
-        cls, is_cancelled: bool = False, filters: dict = {}
+        cls, is_cancelled: bool = False, filters: dict = None
     ) -> QuerySet:
+        if filters is None:
+            filters = {}
         return Booking.objects.filter(is_cancelled=is_cancelled, **filters)
 
     @classmethod

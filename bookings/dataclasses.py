@@ -7,7 +7,7 @@ from users.dataclasses import UserData
 
 @dataclass
 class BookingData:
-    id: int
+    id: int  # noqa
     user_id: int
     screening_id: int
     is_cancelled: bool
