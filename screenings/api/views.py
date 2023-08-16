@@ -61,9 +61,7 @@ class ScreeningAPIView(APIView):
 
     permission_classes = [IsAdminOrReadOnly]
 
-    @swagger_auto_schema(
-        request_body=ScreeningSerializer, responses={200: "OK", 404: "Not found"}
-    )
+    @swagger_auto_schema(responses={200: "OK", 404: "Not found"})
     def get(self, request, screening_id):
         screening = ScreeningService.get_active_screening_by_id(screening_id)
         if screening is None:
@@ -71,6 +69,10 @@ class ScreeningAPIView(APIView):
         serialized_screening = ScreeningSerializer(screening).data
         return Response(serialized_screening)
 
+    @swagger_auto_schema(
+        request_body=ScreeningSerializer,
+        responses={200: "OK", 404: "Not found", 400: "Bad request"},
+    )
     def put(self, request, screening_id):
         screening = ScreeningService.get_active_screening_by_id(screening_id)
         if screening is None:
@@ -85,6 +87,7 @@ class ScreeningAPIView(APIView):
             return Response(serialized_screening)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(responses={204: "No content", 404: "Not found"})
     def delete(self, request, screening_id):
         screening = ScreeningService.get_active_screening_by_id(screening_id)
         if screening is None:
