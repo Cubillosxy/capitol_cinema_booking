@@ -19,6 +19,13 @@ This app allows users to make reservations for screening shows.
 * install pre-commit by running ´pip install pre-commit´
 * run ´pre-commit install´
 
+### Working flow 
+
+* create new Branch from devel `git checkout -b mybranch` 
+* push you branch and see the CI worlkflow [github-actions](https://github.com/Cubillosxy/capitol_cinema_booking/actions)
+* open a new pull request to devel 
+* check the workflow in [github-actions](https://github.com/Cubillosxy/capitol_cinema_booking/actions) to check QA deployment 
+
 
 #### Running the development environment
 
