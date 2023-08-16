@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 from pathlib import Path
 
-from decouple import config
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,7 +33,7 @@ APPEND_SLASH = False
 
 # Application definition
 
-
+ADDITIONAL_APPS = config("ADDITIONAL_APPS", default="", cast=Csv())
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -48,7 +49,8 @@ INSTALLED_APPS = [
     "movies",
     "screenings",
     "bookings",
-]
+] + ADDITIONAL_APPS
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -134,7 +136,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = config("STATIC_URL", default="http://localhost:80/static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
+
+# STATIC_ROOT = '/staticfiles/' # DOCS and admin templates
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -163,9 +172,5 @@ CACHES = {
     }
 }
 
-try:
-    from capitol_cinema.local_settings import *
 
-    # print "using localsettings %s" , ( REDIRECT_URI )
-except ImportError:
-    print("Not local settings loaded ...")
+LOGIN_URL = "/users/login/"
