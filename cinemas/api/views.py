@@ -25,6 +25,7 @@ class CinemaListCreateView(APIView):
     def get(self, request):
         filters = request.query_params
         cinemas = CinemaService.get_all_cinemas(filters=filters)
+        # TODO paginate
         serialized_cinemas = CinemaSerializer(cinemas, many=True).data
         return Response(serialized_cinemas)
 

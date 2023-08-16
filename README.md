@@ -6,6 +6,7 @@ This app allows users to make reservations for screening shows.
  - Documentation generate with redoc [READ THE DOCS](/redoc/)
  - API DOCS [swagger](/api-doc/)
  - Project docs [notion](https://www.notion.so/Naya-Homes-Challenge-b428bedf28934d51bd9cfb8c38153253)
+ - Arquitecture Diagram [monolith]()
 
 
 ### Getting started local environment
@@ -25,7 +26,9 @@ This app allows users to make reservations for screening shows.
 ### Hostnames for accessing the service directly
 We provide pre-load-data for testing the service (only for testing purposes).
 
-# TODO
+ - super user admin *admin@admin.com* password=admin
+ - cinema owner user *owner@owner.com* password=owner
+ 
 
 
 #### Run tests and install libraries

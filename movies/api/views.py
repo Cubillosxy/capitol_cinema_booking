@@ -23,6 +23,7 @@ class MovieListCreate(APIView):
 
     def get(self, request):
         movies = MovieService.get_all_movies()
+        # TODO: paginate
         serialized_movies = MovieSerializer(movies, many=True).data
         return Response(serialized_movies)
 
