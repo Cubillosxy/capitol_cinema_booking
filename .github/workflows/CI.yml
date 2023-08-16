@@ -60,7 +60,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run Pytest
       run: |
-        pytest
+        pytest bookings
       env:
         POSTGRES_DEFAULT_HOSTNAME: localhost
-        SECRET_KEY: secretkk
+        DJANGO_SECRET_KEY: secretkk
