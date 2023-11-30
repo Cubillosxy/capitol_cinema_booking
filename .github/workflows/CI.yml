@@ -22,17 +22,21 @@ jobs:
       uses: pre-commit/action@v3
 
   bandit:
-    uses: jpetrucciani/bandit-check@main
+    runs-on: ubuntu-latest
 
-    # specify a path
-    uses: jpetrucciani/bandit-check@main
-    with:
-      path: '.'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    # provide some flags
-    uses: jpetrucciani/bandit-check@main
-    with:
-      bandit_flags: '-lll -o output.json -f json'
+    - name: Run Bandit with specified path
+      uses: jpetrucciani/bandit-check@main
+      with:
+        path: '.'
+
+    - name: Run Bandit with flags
+      uses: jpetrucciani/bandit-check@main
+      with:
+        bandit_flags: '-lll -o output.json -f json'
 
   build:
     runs-on: ubuntu-latest
