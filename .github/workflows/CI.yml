@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2.0.3
+      uses: actions/checkout@v2
     - name: pre-commit
-      uses: pre-commit/action@v2
+      uses: pre-commit/action@v2.0.3
 
   bandit-check:
     runs-on: ubuntu-latest
