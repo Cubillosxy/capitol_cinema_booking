@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2.0.6
+      uses: actions/checkout@v2.0.3
     - name: pre-commit
-      uses: pre-commit/action@v2.0.6
+      uses: pre-commit/action@v2.0.3
 
   bandit-check:
     runs-on: ubuntu-latest
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2.0.6
+      uses: actions/checkout@v2.0.3
     - name: Build Docker image
       run: docker build . --tag capitol_cinema
 
