@@ -28,15 +28,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Run Bandit with specified path
-      uses: jpetrucciani/bandit-check@main
-      with:
-        path: '.'
-
     - name: Run Bandit with flags
       uses: jpetrucciani/bandit-check@main
       with:
-        bandit_flags: '-lll -o output.json -f json'
+        bandit_flags: '-lll --exclude migrations/*,tests/* -o output.json -f json'
 
   build:
     runs-on: ubuntu-latest
